@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Track and manage family exam results with this easy-to-use portal">
+    <title>Family Exam Results | Track Academic Achievements</title>
+    <link rel="stylesheet" href="exam.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <a href="index.html">
+                        <span class="logo-accent">Family</span>Portal
+                    </a>
+                </div>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#add-result" class="active">Add Result</a></li>
+                    <li><a href="#view-results">View Results</a></li>
+                </ul>
+                <button class="hamburger" aria-label="Toggle menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="exam-hero" class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Family <span class="accent">Exam Results</span></h1>
+                    <p>Track and celebrate academic achievements together</p>
+                    <div class="hero-actions">
+                        <a href="#add-result" class="btn primary-btn">Add New Result</a>
+                        <a href="#view-results" class="btn secondary-btn">View All Results</a>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-shape hero-shape-1"></div>
+            <div class="hero-shape hero-shape-2"></div>
+        </section>
+
+        <section id="add-result" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Add Exam Result</h2>
+                    <p>Enter the details of a new exam result below</p>
+                </div>
+                <div class="card exam-form-container">
+                    <form id="examForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="studentName">Student Name</label>
+                                <input type="text" id="studentName" placeholder="Enter student name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="relationship">Relationship</label>
+                                <select id="relationship" required>
+                                    <option value="" disabled selected>Select relationship</option>
+                                    <option value="Son">Son</option>
+                                    <option value="Daughter">Daughter</option>
+                                    <option value="Sibling">Sibling</option>
+                                    <option value="Nephew">Nephew</option>
+                                    <option value="Niece">Niece</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="examName">Exam Name</label>
+                                <input type="text" id="examName" placeholder="Enter exam name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="examDate">Exam Date</label>
+                                <input type="date" id="examDate" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="subject">Subject</label>
+                                <input type="text" id="subject" placeholder="Enter subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="grade">Grade/Score</label>
+                                <input type="text" id="grade" placeholder="Enter grade or score" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="comments">Comments <span class="optional">(optional)</span></label>
+                            <textarea id="comments" rows="4" placeholder="Add any comments or additional information"></textarea>
+                        </div>
+                        <div class="form-actions">
+                            <button type="submit" class="btn primary-btn">
+                                <i class="fas fa-plus-circle"></i> Add Result
+                            </button>
+                            <button type="reset" class="btn text-btn">
+                                <i class="fas fa-undo"></i> Reset Form
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-results" class="section alternate-bg">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Exam Results</h2>
+                    <p>Browse and filter all recorded exam results</p>
+                </div>
+                
+                <div class="card">
+                    <div class="filters">
+                        <div class="filter-group">
+                            <label for="filterStudent">Filter by Student:</label>
+                            <select id="filterStudent">
+                                <option value="all">All Students</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filterSubject">Filter by Subject:</label>
+                            <select id="filterSubject">
+                                <option value="all">All Subjects</option>
+                            </select>
+                        </div>
+                        <button id="clearFilters" class="btn secondary-btn">
+                            <i class="fas fa-filter"></i> Clear Filters
+                        </button>
+                    </div>
+                    
+                    <div class="results-container">
+                        <table id="resultsTable" class="results-table">
+                            <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Relationship</th>
+                                    <th>Exam Name</th>
+                                    <th>Date</th>
+                                    <th>Subject</th>
+                                    <th>Grade/Score</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resultsBody">
+                                <!-- Results will be populated here by JavaScript -->
+                            </tbody>
+                        </table>
+                        <div id="noResults" class="no-results">
+                            <div class="empty-state">
+                                <i class="fas fa-clipboard-list empty-icon"></i>
+                                <p>No exam results have been added yet.</p>
+                                <a href="#add-result" class="btn primary-btn">Add Your First Result</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="statistics" class="section">
+            <div class="container">
+                <div class="section-header">
+                    <h2>Performance Statistics</h2>
+                    <p>Key metrics and achievements</p>
+                </div>
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-graduate"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Students</h3>
+                            <p id="totalStudents" class="counter">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Total Exams</h3>
+                            <p id="totalExams" class="counter">0</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Top Performer</h3>
+                            <p id="topPerformer">-</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3>Avg. Score</h3>
+                            <p id="avgScore">-</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for viewing details -->
+    <div id="resultModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Exam Result Details</h2>
+                <button class="close-modal" aria-label="Close modal">&times;</button>
+            </div>
+            <div class="result-details">
+                <div class="detail-row">
+                    <strong>Student:</strong>
+                    <span id="modalStudentName"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Relationship:</strong>
+                    <span id="modalRelationship"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Exam:</strong>
+                    <span id="modalExamName"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Date:</strong>
+                    <span id="modalExamDate"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Subject:</strong>
+                    <span id="modalSubject"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Grade/Score:</strong>
+                    <span id="modalGrade"></span>
+                </div>
+                <div class="detail-row">
+                    <strong>Comments:</strong>
+                    <p id="modalComments" class="modal-comments"></p>
+                </div>
+            </div>
+            <div class="modal-actions">
+                <button id="closeModalBtn" class="btn secondary-btn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast hidden">
+        <div class="toast-content">
+            <i id="toastIcon" class="fas fa-check-circle"></i>
+            <span id="toastMessage"></span>
+        </div>
+        <button id="closeToast" class="close-toast" aria-label="Close notification">&times;</button>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <a href="index.html">
+                        <span class="logo-accent">Family</span>Portal
+                    </a>
+                    <p>Track and celebrate academic achievements together</p>
+                </div>
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="#add-result">Add Result</a></li>
+                        <li><a href="#view-results">View Results</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Kalab fasil. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="exam.js"></script>
+</body>
+</html> 
