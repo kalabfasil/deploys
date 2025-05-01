@@ -25,6 +25,10 @@ const navLinks = document.querySelector('.nav-links');
 // Mobile menu toggle
 const menuToggle = document.getElementById('menuToggle');
 
+// Firebase Reference
+const database = firebase.database();
+const resultsRef = database.ref('examResults');
+
 // Toast Types
 const TOAST_TYPES = {
   SUCCESS: 'success',
@@ -38,8 +42,8 @@ let activeToastTimeout;
 
 // Initialize the application
 document.addEventListener('DOMContentLoaded', () => {
-  // Load exam results from localStorage
-  loadExamResults();
+  // Listen for real-time updates
+  initializeRealtimeListeners();
   
   // Initialize UI
   renderResults();
@@ -60,6 +64,25 @@ document.addEventListener('DOMContentLoaded', () => {
   // Add animation to statistics
   animateCounters();
 });
+
+/**
+ * Initialize real-time listeners for Firebase
+ */
+const initializeRealtimeListeners = () => {
+  resultsRef.on('value', (snapshot) => {
+    examResults = [];
+    snapshot.forEach((childSnapshot) => {
+      examResults.push({
+        id: childSnapshot.key,
+        ...childSnapshot.val()
+      });
+    });
+    
+    renderResults();
+    updateStatistics();
+    updateFilters();
+  });
+};
 
 /**
  * Initialize all event listeners
@@ -169,32 +192,6 @@ const closeMobileMenu = () => {
 };
 
 /**
- * Load exam results from localStorage
- */
-const loadExamResults = () => {
-  try {
-    const savedResults = localStorage.getItem('examResults');
-    examResults = savedResults ? JSON.parse(savedResults) : [];
-  } catch (error) {
-    console.error('Error loading exam results:', error);
-    examResults = [];
-    showToast('Error loading saved results. Starting with empty data.', TOAST_TYPES.ERROR);
-  }
-};
-
-/**
- * Save exam results to localStorage
- */
-const saveExamResults = () => {
-  try {
-    localStorage.setItem('examResults', JSON.stringify(examResults));
-  } catch (error) {
-    console.error('Error saving exam results:', error);
-    showToast('Could not save results to local storage', TOAST_TYPES.ERROR);
-  }
-};
-
-/**
  * Handle form submission for adding a new exam result
  * @param {Event} e - The form submission event
  */
@@ -210,6 +207,7 @@ const handleFormSubmit = (e) => {
     subject: document.getElementById('subject').value.trim(),
     grade: document.getElementById('grade').value.trim(),
     comments: document.getElementById('comments').value.trim(),
+    timestamp: firebase.database.ServerValue.TIMESTAMP
   };
   
   // Validate form data
@@ -219,32 +217,23 @@ const handleFormSubmit = (e) => {
     return;
   }
   
-  // Create result object with unique ID
-  const newResult = {
-    id: Date.now(),
-    ...formData,
-    timestamp: new Date().toISOString()
-  };
-  
-  // Add to results array
-  examResults.push(newResult);
-  
-  // Save to localStorage
-  saveExamResults();
-  
-  // Reset form
-  examForm.reset();
-  
-  // Update UI
-  renderResults();
-  updateStatistics();
-  updateFilters();
-  
-  // Show success message
-  showToast('Exam result added successfully!', TOAST_TYPES.SUCCESS);
-  
-  // Scroll to results section
-  document.querySelector('#view-results').scrollIntoView({ behavior: 'smooth' });
+  // Add to Firebase
+  const newResultRef = resultsRef.push();
+  newResultRef.set(formData)
+    .then(() => {
+      // Reset form
+      examForm.reset();
+      
+      // Show success message
+      showToast('Exam result added successfully!', TOAST_TYPES.SUCCESS);
+      
+      // Scroll to results section
+      document.querySelector('#view-results').scrollIntoView({ behavior: 'smooth' });
+    })
+    .catch((error) => {
+      console.error('Error adding result:', error);
+      showToast('Error adding result. Please try again.', TOAST_TYPES.ERROR);
+    });
 };
 
 /**
@@ -314,7 +303,7 @@ const renderResults = (filteredResults = null) => {
  * @param {Event} e - The click event
  */
 const viewResult = (e) => {
-  const resultId = parseInt(e.currentTarget.getAttribute('data-id'));
+  const resultId = e.currentTarget.getAttribute('data-id');
   const result = examResults.find(res => res.id === resultId);
   
   if (result) {
@@ -361,23 +350,19 @@ const hideModal = () => {
  * @param {Event} e - The click event
  */
 const deleteResult = (e) => {
-  const resultId = parseInt(e.currentTarget.getAttribute('data-id'));
+  const resultId = e.currentTarget.getAttribute('data-id');
   const result = examResults.find(res => res.id === resultId);
   
   if (confirm(`Are you sure you want to delete the exam result for ${result.studentName}?`)) {
-    // Remove from array
-    examResults = examResults.filter(res => res.id !== resultId);
-    
-    // Save to localStorage
-    saveExamResults();
-    
-    // Update UI
-    renderResults();
-    updateStatistics();
-    updateFilters();
-    
-    // Show success message
-    showToast('Result deleted successfully', TOAST_TYPES.SUCCESS);
+    // Remove from Firebase
+    resultsRef.child(resultId).remove()
+      .then(() => {
+        showToast('Result deleted successfully', TOAST_TYPES.SUCCESS);
+      })
+      .catch((error) => {
+        console.error('Error deleting result:', error);
+        showToast('Error deleting result. Please try again.', TOAST_TYPES.ERROR);
+      });
   }
 };
 
