@@ -22,6 +22,9 @@ const closeToast = document.getElementById('closeToast');
 const hamburger = document.querySelector('.hamburger');
 const navLinks = document.querySelector('.nav-links');
 
+// Mobile menu toggle
+const menuToggle = document.getElementById('menuToggle');
+
 // Toast Types
 const TOAST_TYPES = {
   SUCCESS: 'success',
@@ -63,12 +66,28 @@ document.addEventListener('DOMContentLoaded', () => {
  */
 const initializeEventListeners = () => {
   // Mobile menu toggle
-  hamburger.addEventListener('click', toggleMobileMenu);
-  
-  // Close mobile menu when clicking a link
-  document.querySelectorAll('.nav-links a').forEach(link => {
-    link.addEventListener('click', closeMobileMenu);
-  });
+  if (menuToggle && navLinks) {
+    menuToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      menuToggle.classList.toggle('active');
+    });
+
+    // Close menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!menuToggle.contains(e.target) && !navLinks.contains(e.target)) {
+        navLinks.classList.remove('active');
+        menuToggle.classList.remove('active');
+      }
+    });
+
+    // Close menu when clicking on a link
+    navLinks.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        navLinks.classList.remove('active');
+        menuToggle.classList.remove('active');
+      });
+    });
+  }
   
   // Form submission
   examForm.addEventListener('submit', handleFormSubmit);
@@ -570,15 +589,10 @@ const showToast = (message, type = TOAST_TYPES.SUCCESS, duration = 3000) => {
   // Show toast
   toast.classList.remove('hidden');
   
-  // Hide toast after duration
   activeToastTimeout = setTimeout(() => {
     hideToast();
   }, duration);
 };
-
-/**
- * Hide the toast notification
- */
 const hideToast = () => {
   toast.classList.add('hidden');
   if (activeToastTimeout) {
