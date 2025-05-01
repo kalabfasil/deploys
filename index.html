@@ -25,7 +25,7 @@
                     <li><a href="#add-result" class="active">Add Result</a></li>
                     <li><a href="#view-results">View Results</a></li>
                 </ul>
-                <button class="hamburger" aria-label="Toggle menu">
+                <button class="hamburger" aria-label="Toggle menu" id="menuToggle">
                     <span></span>
                     <span></span>
                     <span></span>
@@ -57,8 +57,8 @@
                     <p>Enter the details of a new exam result below</p>
                 </div>
                 <div class="card exam-form-container">
-                    <form id="examForm">
-                        <div class="form-row">
+                    <form id="examForm" class="responsive-form">
+                        <div class="form-grid">
                             <div class="form-group">
                                 <label for="studentName">Student Name</label>
                                 <input type="text" id="studentName" placeholder="Enter student name" required>
@@ -75,8 +75,6 @@
                                     <option value="Other">Other</option>
                                 </select>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="examName">Exam Name</label>
                                 <input type="text" id="examName" placeholder="Enter exam name" required>
@@ -85,8 +83,6 @@
                                 <label for="examDate">Exam Date</label>
                                 <input type="date" id="examDate" required>
                             </div>
-                        </div>
-                        <div class="form-row">
                             <div class="form-group">
                                 <label for="subject">Subject</label>
                                 <input type="text" id="subject" placeholder="Enter subject" required>
@@ -96,7 +92,7 @@
                                 <input type="text" id="grade" placeholder="Enter grade or score" required>
                             </div>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group full-width">
                             <label for="comments">Comments <span class="optional">(optional)</span></label>
                             <textarea id="comments" rows="4" placeholder="Add any comments or additional information"></textarea>
                         </div>
@@ -121,7 +117,7 @@
                 </div>
                 
                 <div class="card">
-                    <div class="filters">
+                    <div class="filters responsive-filters">
                         <div class="filter-group">
                             <label for="filterStudent">Filter by Student:</label>
                             <select id="filterStudent">
@@ -140,22 +136,24 @@
                     </div>
                     
                     <div class="results-container">
-                        <table id="resultsTable" class="results-table">
-                            <thead>
-                                <tr>
-                                    <th>Student Name</th>
-                                    <th>Relationship</th>
-                                    <th>Exam Name</th>
-                                    <th>Date</th>
-                                    <th>Subject</th>
-                                    <th>Grade/Score</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody id="resultsBody">
-                                <!-- Results will be populated here by JavaScript -->
-                            </tbody>
-                        </table>
+                        <div class="table-responsive">
+                            <table id="resultsTable" class="results-table">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Relationship</th>
+                                        <th>Exam Name</th>
+                                        <th>Date</th>
+                                        <th>Subject</th>
+                                        <th>Grade/Score</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="resultsBody">
+                                    <!-- Results will be populated here by JavaScript -->
+                                </tbody>
+                            </table>
+                        </div>
                         <div id="noResults" class="no-results">
                             <div class="empty-state">
                                 <i class="fas fa-clipboard-list empty-icon"></i>
@@ -174,7 +172,7 @@
                     <h2>Performance Statistics</h2>
                     <p>Key metrics and achievements</p>
                 </div>
-                <div class="stats-container">
+                <div class="stats-grid">
                     <div class="stat-card">
                         <div class="stat-icon">
                             <i class="fas fa-user-graduate"></i>
@@ -224,31 +222,33 @@
                 <button class="close-modal" aria-label="Close modal">&times;</button>
             </div>
             <div class="result-details">
-                <div class="detail-row">
-                    <strong>Student:</strong>
-                    <span id="modalStudentName"></span>
+                <div class="detail-grid">
+                    <div class="detail-row">
+                        <strong>Student:</strong>
+                        <span id="modalStudentName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Relationship:</strong>
+                        <span id="modalRelationship"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Exam:</strong>
+                        <span id="modalExamName"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Date:</strong>
+                        <span id="modalExamDate"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Subject:</strong>
+                        <span id="modalSubject"></span>
+                    </div>
+                    <div class="detail-row">
+                        <strong>Grade/Score:</strong>
+                        <span id="modalGrade"></span>
+                    </div>
                 </div>
-                <div class="detail-row">
-                    <strong>Relationship:</strong>
-                    <span id="modalRelationship"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Exam:</strong>
-                    <span id="modalExamName"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Date:</strong>
-                    <span id="modalExamDate"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Subject:</strong>
-                    <span id="modalSubject"></span>
-                </div>
-                <div class="detail-row">
-                    <strong>Grade/Score:</strong>
-                    <span id="modalGrade"></span>
-                </div>
-                <div class="detail-row">
+                <div class="detail-row full-width">
                     <strong>Comments:</strong>
                     <p id="modalComments" class="modal-comments"></p>
                 </div>
@@ -287,7 +287,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Kalab Fasil. All Rights Reserved.</p>
+                <p>&copy; 2025 Kalab fasil. All Rights Reserved.</p>
             </div>
         </div>
     </footer>
